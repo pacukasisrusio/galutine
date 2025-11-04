@@ -1,0 +1,37 @@
+@model galutine.Models.Inventory
+@{
+    ViewData["Title"] = Model.Title;
+}
+<h2>@Model.Title</h2>
+<p>@Model.Description</p>
+
+<h4>Items</h4>
+<p><a class="btn btn-success" href="/Inventories/AddItem?inventoryId=@Model.Id">Add item</a></p>
+<table class="table">
+    <thead><tr><th>ID</th>
+        @foreach(var f in Model.Fields.OrderBy(f=>f.SortOrder).Where(f=>f.ShowInTable)) { <th>@f.Title</th> }
+        <th>Likes</th></tr></thead>
+    <tbody>
+        @foreach(var item in Model.Items) {
+            <tr>
+                <td>@item.CustomId</td>
+                @{
+                    var dict = new Dictionary<int,string>();
+                    foreach(var fv in item.FieldValues) dict[fv.InventoryFieldId] = fv.Value ?? "";
+                }
+                @foreach(var f in Model.Fields.OrderBy(f=>f.SortOrder).Where(f=>f.ShowInTable)) {
+                    <td>@(dict.ContainsKey(f.Id) ? dict[f.Id] : "")</td>
+                }
+                <td>@item.Likes.Count()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Discussion</h4>
+@foreach(var post in Model.DiscussionPosts.OrderBy(p=>p.CreatedAt)) {
+    <div class="card mb-2"><div class="card-body">
+        <div class="small text-muted">@post.User?.UserName • @post.CreatedAt</div>
+        <div>@Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(post.Markdown))</div>
+    </div></div>
+}

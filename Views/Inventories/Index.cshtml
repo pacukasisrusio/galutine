@@ -1,0 +1,18 @@
+@model IEnumerable<galutine.Models.Inventory>
+@{
+    ViewData["Title"] = "Inventories";
+}
+<h2>Inventories</h2>
+<p><a class="btn btn-primary" href="/Inventories/Create">Create new</a></p>
+<table class="table">
+    <thead><tr><th>Title</th><th>Owner</th><th>Items</th></tr></thead>
+    <tbody>
+        @foreach(var inv in Model) {
+            <tr>
+                <td><a href="/Inventories/Details/@inv.Id">@inv.Title</a></td>
+                <td>@inv.Owner?.UserName</td>
+                <td>@inv.Items.Count()</td>
+            </tr>
+        }
+    </tbody>
+</table>

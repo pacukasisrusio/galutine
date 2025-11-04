@@ -1,0 +1,16 @@
+﻿@model IEnumerable<galutine.Models.Inventory>
+@{
+    ViewData["Title"] = "Home";
+}
+<h2>Latest inventories</h2>
+<table class="table">
+    <thead><tr><th>Title</th><th>Owner</th></tr></thead>
+    <tbody>
+    @foreach(var inv in Model) {
+        <tr>
+            <td><a href="/Inventories/Details/@inv.Id">@inv.Title</a></td>
+            <td>@inv.Owner?.UserName</td>
+        </tr>
+    }
+    </tbody>
+</table>

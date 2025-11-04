@@ -1,0 +1,10 @@
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.csproj.AssemblyReference.cache
+/home/wizardas/imones/galutine/obj/Debug/net8.0/rpswa.dswa.cache.json
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.GeneratedMSBuildEditorConfig.editorconfig
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.AssemblyInfoInputs.cache
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.AssemblyInfo.cs
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.csproj.CoreCompileInputs.cache
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.MvcApplicationPartsAssemblyInfo.cs
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.MvcApplicationPartsAssemblyInfo.cache
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.RazorAssemblyInfo.cache
+/home/wizardas/imones/galutine/obj/Debug/net8.0/galutine.RazorAssemblyInfo.cs

@@ -1,0 +1,20 @@
+@model galutine.Models.ViewModels.RegisterVm
+@{
+    ViewData["Title"] = "Register";
+}
+<h2>Register</h2>
+<form asp-action="Register" method="post">
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <input asp-for="Password" class="form-control" type="password" />
+    </div>
+    <div class="mb-3">
+        <label>Confirm</label>
+        <input asp-for="ConfirmPassword" class="form-control" type="password" />
+    </div>
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>
