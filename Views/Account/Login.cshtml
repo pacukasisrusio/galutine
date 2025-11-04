@@ -2,19 +2,51 @@
 @{
     ViewData["Title"] = "Login";
 }
-<h2>Login</h2>
-<form asp-action="Login" method="post">
-    <div class="mb-3">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
+
+<div class="loginpage">
+    <div class="left-panel">
+        <h1>THE APP</h1>
+        <div class="userui">
+            <span>Welcome back</span>
+            <span>Sign in to continue</span>
+
+            <form asp-action="Login" method="post" class="userinput">
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <div>
+                    <input asp-for="Email" type="text" placeholder="Username" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <input asp-for="Password" type="password" placeholder="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <input asp-for="RememberMe" type="checkbox" /> @Html.DisplayNameFor(m => m.RememberMe)
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Sign in</button>
+
+                <div class="text-danger mt-2">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                </div>
+            </form>
+
+            <div class="left-bottom">
+                <span>Don't have an account?</span>
+                <a asp-controller="Account" asp-action="Register">Sign up!</a>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label>Password</label>
-        <input asp-for="Password" class="form-control" type="password" />
-    </div>
-    <div class="mb-3 form-check">
-        <input asp-for="RememberMe" class="form-check-input" />
-        <label asp-for="RememberMe" class="form-check-label">Remember me</label>
-    </div>
-    <button class="btn btn-primary" type="submit">Login</button>
-</form>
+
+    <div class="right-panel"></div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

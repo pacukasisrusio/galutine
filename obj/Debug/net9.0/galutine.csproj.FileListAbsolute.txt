@@ -594,3 +594,4 @@
 /home/wizardas/imones/galutine/obj/Debug/net9.0/compressed/x7i70mrsal-6dt1ydxai4.gz
 /home/wizardas/imones/galutine/obj/Debug/net9.0/compressed/nhdhk1n05n-3no9a8e7s3.gz
 /home/wizardas/imones/galutine/obj/Debug/net9.0/compressed/u2e9jd0lqx-3no9a8e7s3.gz
+/home/wizardas/imones/galutine/obj/Debug/net9.0/galutine.sourcelink.json

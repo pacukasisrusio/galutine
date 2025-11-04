@@ -1,47 +1,89 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using galutine.Models;
 using galutine.Models.ViewModels;
+using System.Threading.Tasks;
 
 namespace galutine.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _um;
-        private readonly SignInManager<ApplicationUser> _sm;
-        public AccountController(UserManager<ApplicationUser> um, SignInManager<ApplicationUser> sm) { _um = um; _sm = sm; }
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        [HttpGet]
-        public IActionResult Login(string returnUrl = null) => View(new LoginVm { ReturnUrl = returnUrl });
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginVm vm)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            if (!ModelState.IsValid) return View(vm);
-            var result = await _sm.PasswordSignInAsync(vm.Email, vm.Password, vm.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded) return LocalRedirect(vm.ReturnUrl ?? "/");
-            ModelState.AddModelError("", "Invalid login");
-            return View(vm);
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
-        public IActionResult Register() => View(new RegisterVm());
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterVm vm)
+        public IActionResult Register()
         {
-            if (!ModelState.IsValid) return View(vm);
-            var user = new ApplicationUser { UserName = vm.Email, Email = vm.Email };
-            var res = await _um.CreateAsync(user, vm.Password);
-            if (!res.Succeeded) { foreach (var e in res.Errors) ModelState.AddModelError("", e.Description); return View(vm); }
-            await _sm.SignInAsync(user, isPersistent: false);
-            return RedirectToAction("Index", "Home");
+            return View();
         }
 
         [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("", "Email and password are required.");
+                return View();
+            }
+
+            // ✅ Look up the user by email, then sign in by username
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, password, false, false);
+
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Home");
+
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View();
+        }
+
         public async Task<IActionResult> Logout()
         {
-            await _sm.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("galutine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ebb4a95dcb20aa81d7ce11643c51c6a8cf77d26")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2d034060129bb614c7ad17b0c9c54aecf13ce78")]
 [assembly: System.Reflection.AssemblyProductAttribute("galutine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("galutine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
