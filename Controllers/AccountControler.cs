@@ -64,7 +64,7 @@ namespace galutine.Controllers
                 return View();
             }
 
-            // ✅ Look up the user by email, then sign in by username
+            //Look up the user by email then sign in by username
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {

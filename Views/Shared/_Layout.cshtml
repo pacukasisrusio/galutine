@@ -19,6 +19,12 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="/Inventories">Inventories</a></li>
+         @if (User.IsInRole("Admin"))
+        {
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Admin" asp-action="Index">Admin</a>
+          </li>
+        }
       </ul>
       <ul class="navbar-nav">
         @if (SignInManager.IsSignedIn(User))

@@ -1,0 +1,62 @@
+@model galutine.Models.InventoryItem
+@{
+    var inv = (galutine.Models.Inventory)ViewData["Inventory"]!;
+    ViewData["Title"] = "Add item to " + inv.Title;
+}
+
+<h2>Add item to @inv.Title</h2>
+
+<form asp-action="AddItem" method="post">
+    <input type="hidden" asp-for="InventoryId" />
+
+    <div class="mb-3">
+        <label asp-for="CustomId" class="form-label">Custom ID</label>
+        <input asp-for="CustomId" class="form-control" />
+        <span asp-validation-for="CustomId" class="text-danger"></span>
+        @if (!string.IsNullOrWhiteSpace(inv.CustomIdTemplateJson))
+        {
+            <div class="mt-2">
+                <small class="text-muted">Preview: <span id="customIdPreview">…</span></small>
+                <button type="button" id="refreshPreview" class="btn btn-sm btn-link">Refresh</button>
+            </div>
+        }
+    </div>
+
+    <h4>Fields</h4>
+    @foreach (var f in inv.Fields.OrderBy(f => f.SortOrder))
+    {
+        <div class="mb-3">
+            <label class="form-label">@f.Title</label>
+            <input name="field_@f.Id" class="form-control" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a asp-action="Details" asp-route-id="@inv.Id" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function(){
+            var invId = @inv.Id;
+            var preview = document.getElementById('customIdPreview');
+            var btn = document.getElementById('refreshPreview');
+            if(!preview) return;
+
+            async function loadPreview(){
+                try{
+                    const res = await fetch('/Inventories/PreviewCustomId?inventoryId='+invId);
+                    if(!res.ok) throw new Error('Preview failed');
+                    const j = await res.json();
+                    preview.textContent = j.id || '';
+                }catch(e){
+                    preview.textContent = '—';
+                }
+            }
+
+            loadPreview();
+            if(btn) btn.addEventListener('click', loadPreview);
+        })();
+    </script>
+}

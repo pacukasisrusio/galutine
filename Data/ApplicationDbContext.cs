@@ -9,13 +9,14 @@ namespace galutine.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Inventory> Inventories { get; set; } = null!;
         public DbSet<InventoryField> InventoryFields { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<FieldValue> FieldValues { get; set; }
         public DbSet<InventoryAccess> InventoryAccesses { get; set; }
         public DbSet<ItemLike> ItemLikes { get; set; }
         public DbSet<DiscussionPost> DiscussionPosts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +27,13 @@ namespace galutine.Data
                 .WithMany(u => u.OwnedInventories)
                 .HasForeignKey(i => i.OwnerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // SQLite doesn't generate rowversion/timestamp values like SQL Server.
+            // Prevent EF from treating RowVersion as a database-generated value so
+            // the application can supply a non-null value on insert.
+            builder.Entity<Inventory>()
+                .Property(i => i.RowVersion)
+                .ValueGeneratedNever();
 
             builder.Entity<InventoryItem>()
                 .HasIndex(i => new { i.InventoryId, i.CustomId })
@@ -42,6 +50,11 @@ namespace galutine.Data
                 .WithMany()
                 .HasForeignKey(fv => fv.InventoryFieldId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // For InventoryItem rowversion as well (SQLite doesn't auto-generate it)
+            builder.Entity<InventoryItem>()
+                .Property(it => it.RowVersion)
+                .ValueGeneratedNever();
 
             builder.Entity<InventoryAccess>()
                 .HasKey(a => new { a.InventoryId, a.UserId });
@@ -69,5 +82,6 @@ namespace galutine.Data
                 .WithMany(i => i.DiscussionPosts)
                 .HasForeignKey(p => p.InventoryId);
         }
+
     }
 }
