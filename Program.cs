@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // IDENTITY CONFIGURATION
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // require confirmed email
+    options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -88,10 +88,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
-
-// --------------------------
 // Seed Admin Method
-// --------------------------
 async Task SeedAdminAsync(IServiceProvider serviceProvider)
 {
     var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -104,7 +101,7 @@ async Task SeedAdminAsync(IServiceProvider serviceProvider)
     }
 
     // Define the first admin email
-    var adminEmail = "admin@gmail.com";
+    var adminEmail = "adminas@gmail.com";
 
     // Check if the user exists
     var adminUser = await userManager.FindByEmailAsync(adminEmail);

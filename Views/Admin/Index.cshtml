@@ -1,24 +1,45 @@
 @model IEnumerable<galutine.Models.ApplicationUser>
 @{
-    ViewData["Title"] = "Admin - Users";
+    ViewData["Title"] = "Admin - User Management";
+    var roles = ViewBag.UserRoles as Dictionary<string, IList<string>> ?? new();
 }
-<h2>Users</h2>
-<table class="table">
-    <thead><tr><th>Email</th><th>Blocked</th><th>Actions</th></tr></thead>
-    <tbody>
-        @foreach(var u in Model) {
+
+<h2>User Management</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+<form id="userActionForm" method="post">
+    <div class="mb-3">
+        <button type="submit" formaction="/Admin/ToggleBlock" class="btn btn-warning">Block / Unblock</button>
+        <button type="submit" formaction="/Admin/ToggleAdmin" class="btn btn-secondary">Toggle Admin</button>
+        <button type="submit" formaction="/Admin/DeleteUser" class="btn btn-danger" onclick="return confirm('Delete this user?')">Delete</button>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>@u.Email</td>
-                <td>@u.IsBlocked</td>
-                <td>
-                    <form method="post" asp-action="ToggleBlock" asp-route-id="@u.Id" style="display:inline">
-                        <button class="btn btn-sm btn-warning">@((u.IsBlocked) ? "Unblock" : "Block")</button>
-                    </form>
-                    <form method="post" asp-action="ToggleAdmin" asp-route-id="@u.Id" style="display:inline">
-                        <button class="btn btn-sm btn-secondary">Toggle Admin</button>
-                    </form>
-                </td>
+                <th>Select</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Blocked</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                var roleList = roles.ContainsKey(u.Id) ? string.Join(", ", roles[u.Id]) : "User";
+                <tr>
+                    <td>
+                        <input type="radio" name="id" value="@u.Id" required />
+                    </td>
+                    <td>@u.Email</td>
+                    <td>@roleList</td>
+                    <td>@(u.IsBlocked ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
