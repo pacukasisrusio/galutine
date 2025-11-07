@@ -111,7 +111,7 @@ async Task SeedAdminAsync(IServiceProvider serviceProvider)
         {
             UserName = adminEmail,
             Email = adminEmail,
-            EmailConfirmed = true // verified email
+            EmailConfirmed = true
         };
         await userManager.CreateAsync(adminUser, "Admin");
     }

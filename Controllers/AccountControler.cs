@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using galutine.Models;
 using galutine.Models.ViewModels;
-using System.Threading.Tasks;
 
 namespace galutine.Controllers
 {
